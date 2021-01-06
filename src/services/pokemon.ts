@@ -21,7 +21,7 @@ const queryMultipleResources = async (
   limit?: number,
   offset?: number
 ): Promise<QueryMultipleResources> => {
-  const requestURL = new URL(`/${resourceName}`, POKEMON_API_URL);
+  const requestURL = new URL(resourceName, POKEMON_API_URL);
 
   if (limit) {
     requestURL.searchParams.append('limit', limit.toString());
@@ -95,7 +95,7 @@ export const getAllPokemons = async (limit = 35, offset?: number): Promise<GetAl
       response = { pokemons: sortPokemonsArray(pokemons), newOffset };
     }
   } catch (err) {
-    response = { hasError: true, errorMessages: [err] };
+    response = { hasError: true, errorMessages: [`${err}`] };
   }
 
   return response;
