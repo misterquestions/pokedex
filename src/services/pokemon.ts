@@ -45,7 +45,7 @@ export const getSpecificPokemon = async (pokemonId: number): Promise<GetSpecific
 
     response = { pokemon };
   } catch (err) {
-    response = { hasError: true, errorMessage: err };
+    response = { errorMessage: err };
   }
 
   return response;
@@ -54,14 +54,15 @@ export const getSpecificPokemon = async (pokemonId: number): Promise<GetSpecific
 export const sortPokemonsArray = (pokemons: Array<Pokemon>): Array<Pokemon> =>
   pokemons.sort((a, b) => (a.order < b.order ? -1 : 1));
 
-export const getAllPokemons = async (limit = 35, offset?: number): Promise<GetAllPokemons> => {
-  let response: GetAllPokemons;
+export const getAllPokemons = async (limit: number, offset: number): Promise<GetAllPokemons> => {
+  let response: GetAllPokemons = { newOffset: -1, pokemons: [], errorMessages: [] };
 
   try {
+    console.log({ limit, offset });
     const { next, results } = await queryMultipleResources('pokemon', limit, offset);
     const pokemons = new Array<Pokemon>();
-    const errorMessages = new Array<string>();
 
+    // Try to fetch data of each pokemon and add it to the response
     await Promise.all(
       results.map(
         async (resource): Promise<Pokemon | null> => {
@@ -69,8 +70,12 @@ export const getAllPokemons = async (limit = 35, offset?: number): Promise<GetAl
 
           try {
             pokemon = await queryResourceFromUrl<Pokemon>(resource.url);
+
+            if (pokemon) {
+              pokemons.push(pokemon);
+            }
           } catch (err) {
-            errorMessages.push(`Failed fetching pokemon ${resource.name}`);
+            response.errorMessages.push(`Failed fetching pokemon ${resource.name}`);
           }
 
           return pokemon;
@@ -78,24 +83,19 @@ export const getAllPokemons = async (limit = 35, offset?: number): Promise<GetAl
       )
     );
 
-    if (errorMessages.length > 0) {
-      response = { hasError: true, errorMessages };
-    } else {
-      let newOffset: number | null = null;
+    response.pokemons = sortPokemonsArray(pokemons);
 
-      if (next) {
-        const nextURL = new URL(next);
-        const nextURLOffset = nextURL.searchParams.get('offset');
+    // If there's a next query add the offset
+    if (next) {
+      const nextURL = new URL(next);
+      const nextURLOffset = nextURL.searchParams.get('offset');
 
-        if (nextURLOffset) {
-          newOffset = parseInt(nextURLOffset, 10);
-        }
+      if (nextURLOffset) {
+        response.newOffset = parseInt(nextURLOffset, 10);
       }
-
-      response = { pokemons: sortPokemonsArray(pokemons), newOffset };
     }
   } catch (err) {
-    response = { hasError: true, errorMessages: [`${err}`] };
+    response.errorMessages.push(`${err}`);
   }
 
   return response;

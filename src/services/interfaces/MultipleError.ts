@@ -1,4 +1,3 @@
 export default interface MultipleError {
-  hasError?: boolean;
-  errorMessages?: Array<string>;
+  errorMessages: Array<string>;
 }

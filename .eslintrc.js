@@ -39,6 +39,7 @@ module.exports = {
     'prefer-const': 'off',
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error', { functions: false, classes: false, variables: true }],
+    'no-useless-constructor': 'off',
   },
   settings: {
     'import/resolver': {
