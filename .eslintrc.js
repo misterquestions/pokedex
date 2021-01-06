@@ -12,6 +12,7 @@ module.exports = {
       jsx: true,
     },
   },
+  ignorePatterns: ['node_modules/*', '.next/*', '.out/*', '!.prettierrc.js'],
   plugins: ['@typescript-eslint', 'react', 'prettier'],
   extends: [
     'airbnb',
