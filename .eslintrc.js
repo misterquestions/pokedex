@@ -27,6 +27,7 @@ module.exports = {
     'prettier/react',
   ],
   rules: {
+    'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.ts', '.tsx'] }],
     'import/extensions': 'off',
     'react/prop-types': 'off',
@@ -44,9 +45,6 @@ module.exports = {
   },
   settings: {
     'import/resolver': {
-      'babel-module': {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
       node: {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
         paths: ['src'],
