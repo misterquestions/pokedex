@@ -25,7 +25,10 @@ const useStyles = makeStyles((theme) =>
       marginTop: theme.spacing(2),
     },
     loadingContainer: {
-      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   })
 );
@@ -42,9 +45,6 @@ const IndexPage: NextPage<GetAllPokemons> = ({
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const classes = useStyles();
 
-  console.log('update called');
-  console.log({ errorMessages, pokemons, loadOffset, loadingStatus });
-
   React.useEffect(() => {
     const handleScroll = debounce(async () => {
       if (loadingStatus || loadOffset === -1) return;
@@ -53,7 +53,6 @@ const IndexPage: NextPage<GetAllPokemons> = ({
         // Display loading spinner
         setLoadingStatus(true);
 
-        /*
         // Actual fetch process
         const result = await getAllPokemons(35, loadOffset);
 
@@ -63,7 +62,6 @@ const IndexPage: NextPage<GetAllPokemons> = ({
 
         // Remove loading spinner
         setLoadingStatus(false);
-        */
       }
     }, 100);
 
@@ -85,7 +83,7 @@ const IndexPage: NextPage<GetAllPokemons> = ({
           </Grid>
         ))}
         {loadingStatus && (
-          <Grid item>
+          <Grid item xs={6} md={4} lg={3}>
             <div className={classes.loadingContainer}>
               <CircularProgress />
             </div>
