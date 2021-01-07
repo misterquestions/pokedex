@@ -3,7 +3,10 @@ import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 import theme from '@themes/default';
+import Header from '@components/Header';
+import ScrollTop from '@components/ScrollTop';
 
 const CustomApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   React.useEffect(() => {
@@ -22,7 +25,11 @@ const CustomApp: React.FC<AppProps> = ({ Component, pageProps }) => {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} />
+        <Header />
+        <Container>
+          <Component {...pageProps} />
+        </Container>
+        <ScrollTop />
       </ThemeProvider>
     </>
   );
