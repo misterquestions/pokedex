@@ -87,7 +87,11 @@ const Header: React.FC = () => {
   const classes = useStyles();
   const { control, handleSubmit } = useForm<SearchForm>();
 
-  const onSubmit = (data: SearchForm) => console.log(data);
+  const onSubmit = (data: SearchForm) => {
+    if (data.search.length !== 0) {
+      router.push(`/pokemon/${data.search}`);
+    }
+  };
 
   return (
     <div className={classes.root}>
