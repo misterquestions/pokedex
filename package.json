@@ -6,11 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "format": "prettier --write .",
     "lint": "eslint --ext js,jsx,ts,tsx --fix",
+    "lint:pretty": "yarn format && yarn lint",
+    "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "test": "jest",
-    "test:all": "yarn lint && yarn type-check && yarn test"
+    "test:all": "yarn lint:pretty && yarn type-check && yarn test"
   },
   "husky": {
     "hooks": {
