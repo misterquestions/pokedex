@@ -36,16 +36,16 @@ const queryMultipleResources = async (
   return result;
 };
 
-export const getSpecificPokemon = async (pokemonId: number): Promise<GetSpecificPokemon> => {
+export const getSpecificPokemon = async (pokemonId: string): Promise<GetSpecificPokemon> => {
   let response: GetSpecificPokemon;
 
   try {
-    const requestURL = new URL(`/pokemon/${pokemonId}`, POKEMON_API_URL);
+    const requestURL = new URL(`pokemon/${pokemonId}`, POKEMON_API_URL);
     const pokemon = await queryResourceFromUrl<Pokemon>(requestURL.toString());
 
     response = { pokemon };
   } catch (err) {
-    response = { errorMessage: err };
+    response = { errorMessage: `${err}` };
   }
 
   return response;
@@ -58,7 +58,6 @@ export const getAllPokemons = async (limit: number, offset: number): Promise<Get
   let response: GetAllPokemons = { newOffset: -1, pokemons: [], errorMessages: [] };
 
   try {
-    console.log({ limit, offset });
     const { next, results } = await queryMultipleResources('pokemon', limit, offset);
     const pokemons = new Array<Pokemon>();
 
