@@ -4,8 +4,8 @@ import createStyles from '@material-ui/core/styles/createStyles';
 import Link from 'next/link';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
+import capitalize from '@material-ui/core/utils/capitalize';
 import PokemonResource from '@services/interfaces/pokemon/Pokemon';
-import { capitalize } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

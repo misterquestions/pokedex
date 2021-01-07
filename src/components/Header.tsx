@@ -1,9 +1,13 @@
 import React from 'react';
 import { makeStyles, createStyles, fade } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Link from 'next/link';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
+import { Controller, useForm } from 'react-hook-form';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -14,12 +18,23 @@ const useStyles = makeStyles((theme) =>
       display: 'flex',
       justifyContent: 'space-between',
     },
+    navigation: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    backIcon: {
+      marginRight: theme.spacing(2),
+      [theme.breakpoints.up('sm')]: {
+        display: 'none',
+      },
+    },
     logo: {
       display: 'none',
       [theme.breakpoints.up('sm')]: {
         display: 'block',
         height: theme.spacing(8),
         padding: theme.spacing(1),
+        cursor: 'pointer',
       },
     },
     search: {
@@ -63,26 +78,48 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const Header: React.ForwardRefRenderFunction<HTMLDivElement | null> = (_, ref) => {
+interface SearchForm {
+  search: string;
+}
+
+const Header: React.FC = () => {
+  const router = useRouter();
   const classes = useStyles();
+  const { control, handleSubmit } = useForm<SearchForm>();
+
+  const onSubmit = (data: SearchForm) => console.log(data);
 
   return (
     <div className={classes.root}>
       <AppBar>
         <Toolbar className={classes.toolbar}>
-          <img className={classes.logo} src="/assets/logo.svg" alt="logo" />
+          <Link href="/">
+            <div className={classes.navigation}>
+              <img className={classes.logo} src="/assets/logo.svg" alt="logo" />
+              {router.pathname !== '/' && <ArrowBackIcon className={classes.backIcon} />}
+            </div>
+          </Link>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Controller
+                name="search"
+                control={control}
+                defaultValue=""
+                as={
+                  <InputBase
+                    placeholder="Search…"
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                    inputProps={{ 'aria-label': 'search' }}
+                  />
+                }
+              />
+            </form>
           </div>
         </Toolbar>
       </AppBar>
@@ -91,6 +128,4 @@ const Header: React.ForwardRefRenderFunction<HTMLDivElement | null> = (_, ref) =
   );
 };
 
-const HeaderForwardRef = React.forwardRef<HTMLDivElement | null>(Header);
-
-export default HeaderForwardRef;
+export default Header;
