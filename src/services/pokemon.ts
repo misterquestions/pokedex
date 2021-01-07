@@ -4,7 +4,7 @@ import GetSpecificPokemon from './interfaces/GetSpecificPokemon';
 import Pokemon from './interfaces/pokemon/Pokemon';
 import QueryMultipleResources from './interfaces/QueryMultipleResources';
 
-const POKEMON_API_URL = process.env.NEXT_PUBLIC_POKEMON_API_URL || '';
+export const POKEMON_API_URL = process.env.NEXT_PUBLIC_POKEMON_API_URL || '';
 
 const queryResourceFromUrl = async <T>(resourceUrl: string): Promise<T> => {
   const { data, status, statusText } = await axios.get<T>(resourceUrl);
